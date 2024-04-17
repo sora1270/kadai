@@ -6,7 +6,7 @@ class BooksController < ApplicationController
     redirect_to book_path(@book)
    else
     @books = Book.all
-    flash.now[:danger] = 'Errors prohibited this book from being saved.'
+    flash.now[:danger]
     render :index
    end
   end
@@ -18,7 +18,6 @@ class BooksController < ApplicationController
 
   def show
     @book = Book.find(params[:id])
-    flash.now[:notice] = 'Book was successfully created.' if flash[:notice].present?
   end
 
   def edit
@@ -26,8 +25,13 @@ class BooksController < ApplicationController
   end
 
   def update
-  @book = Book.find(params[:id])
-  redirect_to book_path(@book.id)
+   @book = Book.find(params[:id])
+   if @book.update(book_params)
+    flash[:notice] = "Book was successfully updated."
+    redirect_to book_path(@book)
+   else
+    render :edit
+   end
   end
   
   def destroy
